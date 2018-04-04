@@ -35,11 +35,13 @@ class TwitterPlugin(p.SingletonPlugin):
         # Add resources
         p.toolkit.add_resource('theme/fanstatic', 'ckanext-twitter')
 
+
     # IPackageController
     def after_update(self, context, pkg_dict):
         is_suitable = twitter_helpers.twitter_pkg_suitable(context,
                                                            pkg_dict['id'])
         if is_suitable:
+            session.pop('twitter_is_suitable', '')
             session.setdefault('twitter_is_suitable', pkg_dict['id'])
             session.save()
 
@@ -57,6 +59,11 @@ class TwitterPlugin(p.SingletonPlugin):
         controller = 'ckanext.twitter.controllers.tweet:TweetController'
         _map.connect('post_tweet', '/dataset/{pkg_id}/tweet',
                      controller = controller, action = 'send',
+                     conditions = {
+                         'method': ['POST']
+                         })
+        _map.connect('no_tweet', '/dataset/{pkg_id}/no-tweet',
+                     controller = controller, action = 'no_tweet',
                      conditions = {
                          'method': ['POST']
                          })

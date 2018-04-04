@@ -1,7 +1,7 @@
 import json
 
 import ckan.lib.base as base
-from ckan.common import c
+from ckan.common import c, session
 from ckanext.twitter.lib import twitter_api
 
 
@@ -29,4 +29,11 @@ class TweetController(base.BaseController):
             'success': posted,
             'reason': reason,
             'tweet': text if text else 'tweet not defined'
+            })
+
+    def no_tweet(self, pkg_id):
+        session.pop('twitter_is_suitable', '')
+        session.save()
+        return json.dumps({
+            'success': True
             })

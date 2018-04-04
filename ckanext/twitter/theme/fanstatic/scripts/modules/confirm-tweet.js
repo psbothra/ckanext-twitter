@@ -11,7 +11,7 @@ ckan.module('confirm-tweet', function ($, _) {
                     _onReceiveSnippet: function (html) {
                         var url    = '/dataset/' + self.options.pkgid + '/tweet';
                         self.modal = $(html);
-                        var form   = self.modal.find('#edit-tweet-form');
+                        var form   = self.modal.find('#edit-tweet-form');                        
                         form.submit(function (e) {
                             e.preventDefault();
                             $.post(url,
@@ -31,7 +31,16 @@ ckan.module('confirm-tweet', function ($, _) {
                                    'json'
                             )
                         });
-
+                        self.modal.find('.no-tweet').click(function(e){
+                            var url_tweet    = '/dataset/' + self.options.pkgid + '/no-tweet';
+                            $.post(url_tweet,
+                                form.serialize(),
+                                function (results) {
+                                    self.modal.modal('hide');
+                                },
+                                'json'
+                         )
+                        })
                         self.modal.modal().appendTo(self.sandbox.body);
                     },
 
