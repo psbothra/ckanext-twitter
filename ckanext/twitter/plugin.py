@@ -62,8 +62,8 @@ class TwitterPlugin(p.SingletonPlugin):
                      conditions = {
                          'method': ['POST']
                          })
-        _map.connect('no_tweet', '/dataset/{pkg_id}/no-tweet',
-                     controller = controller, action = 'no_tweet',
+        _map.connect('no_tweet', '/dataset/disable-tweet-popup',
+                     controller = controller, action = 'disable_tweet_popup',
                      conditions = {
                          'method': ['POST']
                          })

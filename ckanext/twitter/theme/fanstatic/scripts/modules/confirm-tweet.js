@@ -32,9 +32,9 @@ ckan.module('confirm-tweet', function ($, _) {
                             )
                         });
                         self.modal.find('.no-tweet').click(function(e){
-                            var url_tweet    = '/dataset/' + self.options.pkgid + '/no-tweet';
+                            var url_tweet    = '/dataset/disable-tweet-popup';
                             $.post(url_tweet,
-                                form.serialize(),
+                                {},
                                 function (results) {
                                     self.modal.modal('hide');
                                 },

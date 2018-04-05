@@ -31,7 +31,7 @@ class TweetController(base.BaseController):
             'tweet': text if text else 'tweet not defined'
             })
 
-    def no_tweet(self, pkg_id):
+    def disable_tweet_popup(self):
         session.pop('twitter_is_suitable', '')
         session.save()
         return json.dumps({
