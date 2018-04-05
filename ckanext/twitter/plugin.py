@@ -35,7 +35,6 @@ class TwitterPlugin(p.SingletonPlugin):
         # Add resources
         p.toolkit.add_resource('theme/fanstatic', 'ckanext-twitter')
 
-
     # IPackageController
     def after_update(self, context, pkg_dict):
         is_suitable = twitter_helpers.twitter_pkg_suitable(context,
