@@ -39,7 +39,7 @@ class TwitterPlugin(p.SingletonPlugin):
     def after_update(self, context, pkg_dict):
         is_suitable = twitter_helpers.twitter_pkg_suitable(context,
                                                            pkg_dict['id'])
-        if is_suitable:
+        if is_suitable and 'Twitter_Popup' in pkg_dict.get('twitter_popup', []):
             session.pop('twitter_is_suitable', '')
             session.setdefault('twitter_is_suitable', pkg_dict['id'])
             session.save()
