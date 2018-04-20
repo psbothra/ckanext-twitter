@@ -11,7 +11,7 @@ ckan.module('confirm-tweet', function ($, _) {
                     _onReceiveSnippet: function (html) {
                         var url    = '/dataset/' + self.options.pkgid + '/tweet';
                         self.modal = $(html);
-                        var form   = self.modal.find('#edit-tweet-form');             
+                        var form   = self.modal.find('#edit-tweet-form');   
                         form.submit(function (e) {
                             e.preventDefault();
                             $.post(url,
