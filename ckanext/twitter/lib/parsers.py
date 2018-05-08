@@ -11,7 +11,7 @@ try:
 except ImportError:
     from pylons import config
 
-tweet_limit = 140
+tweet_limit = 280
 
 
 def extract_info(context, pkg_dict, template_length, tokens):
@@ -148,7 +148,7 @@ def generate_tweet(context, pkg_id, is_new, force_truncate = True):
     template = Environment().from_string(format_string)
     simplified_dict = extract_info(context, pkg,
                                    len(unicode(template.module)), tokens)
-    simplified_dict['dataset_url'] = str(config.get('ckan.site_url'))+'/dataset/activity/'+pkg['name']
+    simplified_dict['dataset_url'] = str(config.get('ckan.site_url'))+'/dataset/activity/'+pkg['id']
     rendered = template.render(simplified_dict)
     # extra check to make sure the tweet isn't too long
     if len(rendered) > tweet_limit and force_truncate:
