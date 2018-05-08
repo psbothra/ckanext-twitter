@@ -40,7 +40,6 @@ class TwitterPlugin(p.SingletonPlugin):
 
     # IResourceController
     def after_update(self, context, res_pkg_dict):
-        print ckanext.twitter.lib.config_helpers.tweet_trigger()
         if ckanext.twitter.lib.config_helpers.tweet_trigger() == 'dataset':
             pkg_dict = res_pkg_dict
         else:
