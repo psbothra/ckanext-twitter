@@ -48,10 +48,13 @@ class TwitterPlugin(p.SingletonPlugin):
 
         is_suitable = twitter_helpers.twitter_pkg_suitable(context,
                                                            pkg_dict['id'])
-        if is_suitable and 'Twitter_Popup' in pkg_dict.get('twitter_popup', []):
-            session.pop('twitter_is_suitable', '')
-            session.setdefault('twitter_is_suitable', pkg_dict['id'])
-            session.save()
+        if is_suitable:
+            try:
+                session.pop('twitter_is_suitable', '')
+                session.setdefault('twitter_is_suitable', pkg_dict['id'])
+                session.save()
+            except TypeError:
+                print "session not iterable"
 
     # ITemplateHelpers
     def get_helpers(self):
