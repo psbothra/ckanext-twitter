@@ -1,9 +1,9 @@
 import ckan.plugins as p
 import ckanext.twitter.lib.config_helpers
+from ckan.plugins import toolkit as tk
 from beaker.cache import cache_regions
 from ckan.common import session
 from ckanext.twitter.lib import config_helpers, helpers as twitter_helpers
-
 
 class TwitterPlugin(p.SingletonPlugin):
     '''
@@ -11,10 +11,13 @@ class TwitterPlugin(p.SingletonPlugin):
     '''
     p.implements(p.IConfigurable, inherit = True)
     p.implements(p.IConfigurer)
-    p.implements(p.IPackageController, inherit = True)
     p.implements(p.ITemplateHelpers, inherit = True)
     p.implements(p.IRoutes, inherit = True)
-
+    if ckanext.twitter.lib.config_helpers.tweet_trigger() == 'dataset':
+        p.implements(p.IPackageController, inherit = True)
+    else:
+        p.implements(p.IResourceController, inherit = True)
+    
     # IConfigurable
     def configure(self, config):
         cache_regions.update({
@@ -35,8 +38,14 @@ class TwitterPlugin(p.SingletonPlugin):
         # Add resources
         p.toolkit.add_resource('theme/fanstatic', 'ckanext-twitter')
 
-    # IPackageController
-    def after_update(self, context, pkg_dict):
+    # IResourceController
+    def after_update(self, context, res_pkg_dict):
+        if ckanext.twitter.lib.config_helpers.tweet_trigger() == 'dataset':
+            pkg_dict = res_pkg_dict
+        else:
+            data_dict = {'id': res_pkg_dict['package_id']}
+            pkg_dict = tk.get_action('package_show')(context, data_dict)
+
         is_suitable = twitter_helpers.twitter_pkg_suitable(context,
                                                            pkg_dict['id'])
         if is_suitable:
@@ -61,6 +70,11 @@ class TwitterPlugin(p.SingletonPlugin):
         controller = 'ckanext.twitter.controllers.tweet:TweetController'
         _map.connect('post_tweet', '/dataset/{pkg_id}/tweet',
                      controller = controller, action = 'send',
+                     conditions = {
+                         'method': ['POST']
+                         })
+        _map.connect('no_tweet', '/dataset/disable-tweet-popup',
+                     controller = controller, action = 'disable_tweet_popup',
                      conditions = {
                          'method': ['POST']
                          })

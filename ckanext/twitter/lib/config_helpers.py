@@ -35,6 +35,13 @@ def twitter_hours_between_tweets():
     '''
     return pylons.config.get('ckanext.twitter.hours_between_tweets', 24)
 
+def tweet_trigger():
+    '''
+    For trigger the tweet whether at Dataset or Resource
+    :return: int
+    '''
+    return pylons.config.get('ckanext.twitter.tweet_trigger')
+
 
 def twitter_new_format():
     '''
